@@ -1,0 +1,13 @@
+[Desktop Entry]
+Icon=whiteboard
+Type=Service
+X-KDE-ServiceTypes=KCModule
+
+X-KDE-Library=kcm_kopete_whiteboard
+X-KDE-ParentApp=kopete_whiteboard
+X-KDE-ParentComponents=kopete_whiteboard
+
+Name=whiteboard Plugin Configuration
+Name[cs]=Nastavení pluginu sdílené tabule
+Comment=whiteboard Plugin
+Comment[cs]=Plugin sdílené tabule

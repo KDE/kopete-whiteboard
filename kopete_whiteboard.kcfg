@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg> 
+  <kcfgfile name="kopeterc"/>
+  <group name="Whiteboard Plugin">
+
+    <entry name="AutoAccept" type="Bool">
+      <label>Auto accept invitations</label>
+      <default>true</default>
+    </entry>
+
+    <entry name="NewWindow" type="Bool">
+      <label>New sessions in new windows (instead of tabs)</label>
+      <default>true</default>
+    </entry>
+
+  </group> 
+</kcfg>

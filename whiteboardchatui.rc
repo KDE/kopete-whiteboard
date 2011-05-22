@@ -1,0 +1,18 @@
+<!DOCTYPE kpartgui>
+<kpartgui version="1" name="kopetechatwindow">
+
+	<MenuBar>
+		<Menu name="file" >
+			<Action name="start_whiteboard" />
+		</Menu>
+	</MenuBar>
+
+	<ToolBar name="mainToolBar" fullWidth="true">
+		<Action name="start_whiteboard" />
+	</ToolBar>
+
+	<ToolBar name="chatToolBar" fullWidth="true">
+		<Action name="start_whiteboard" />
+	</ToolBar>
+
+</kpartgui>
