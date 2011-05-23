@@ -16,6 +16,4 @@ X-KDE-PluginInfo-Depends=
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=false
 Name=Whiteboard
-Name[cs]=Sdílená tabule
 Comment=Colaborative drawing and sharing multimedia content
-Comment[cs]=Společné kreslení a sdílení multimediálního obsahu
