@@ -197,8 +197,8 @@ WhiteboardDialog::WhiteboardDialog(Kopete::ChatSession *chatSession, QWidget* pa
         setCentralWidget(w);
 //	setMainWidget( w );
 
-        connect(sess->m_wbwidget, SIGNAL(newWb(const QDomElement &)), sess, SLOT(slotElementReady(const QDomElement &)));
-        connect(sess, SIGNAL(newWb(const QDomElement &)), this, SLOT(slotElementReady(const QDomElement &)));
+//        connect(sess->m_wbwidget, SIGNAL(newWb(const QDomElement &)), sess, SLOT(slotElementReady(const QDomElement &)));
+//        connect(sess, SIGNAL(newWb(const QDomElement &)), this, SLOT(slotElementReady(const QDomElement &)));
         connect(sess, SIGNAL(userOffline(QString)), this, SLOT(slotUserOffline(QString)));
 
         connect(mMainWidget->m_paletteWidget, SIGNAL(fgColorChanged(const QColor &)), this, SLOT(slotFgColorChanged(const QColor &)));

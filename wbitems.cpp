@@ -335,8 +335,11 @@ QDomElement WbItem::svg() {
 
 QList<QString> WbItem::parseSvg(QDomElement &_svg, bool emitChanges) {
 	QList<QString> changed;
+//        QDomDocument doc;
+//        doc.appendChild ( _svg );
+//        msg.setPlainBody(doc.toString());
 //        kDebug() << (_svg == NULL);
-        kDebug() << _svg.text();
+//        kDebug() << _svg.text();
 	// First process changes to existing elements
 	foreach(QString a, attributes.keys()) {
 		if(attributes[a] != _svg.attribute(a)) {
