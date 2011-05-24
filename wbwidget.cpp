@@ -121,7 +121,7 @@ void WbWidget::setMode(Mode mode) {
 				// Send out the new item in pieces if large
 //				_svg = newWbItem_->svg();
                                 d.appendChild(_svg.toElement());
-                                kDebug() << d.toString();
+//                                kDebug() << d.toString();
 
 				int chunksize = 51200;
 				if(_svg.attribute("xlink:href").size() <= chunksize)
@@ -220,8 +220,8 @@ void WbWidget::setImporting(bool i) {
 
 void WbWidget::undo()
 {
-    kDebug() << elements.size();
-    kDebug() << scene->items().size();
+//    kDebug() << elements.size();
+//    kDebug() << scene->items().size();
     if(elements.size() > 0) {
 //        QDomElement & el = elements.last();
         int elSize = scene->items().size();
@@ -253,7 +253,7 @@ void WbWidget::undo()
             QDomDocument doc;
             doc.createElement("element");//it doesnt convert to string without it
             doc.appendChild(el);
-            kDebug() << doc.toString();
+//            kDebug() << doc.toString();
             WbWidget::processWb(el, false);
             emit newWb(el);
         }
@@ -369,7 +369,6 @@ void WbWidget::mousePressEvent(QMouseEvent * event) {
             }
             return;
 	} else if(mode_ == DrawRectangle) {
-            kDebug() << "sem";
 		QPointF startPoint = mapToScene(mapFromGlobal(event->globalPos()));
 		QDomDocument d;
 		QDomElement _svg = d.createElement("rect");
@@ -378,8 +377,6 @@ void WbWidget::mousePressEvent(QMouseEvent * event) {
 		_svg.setAttribute("height", 2);
 		_svg.setAttribute("width", 2);
 		// Create the element
-                kDebug() << scene->newId();
-                kDebug() << scene->newIndex();
 		newWbItem_ = new WbRectangle(_svg, scene->newId(), scene->newIndex(), "root", scene);
 		newWbItem_->setStrokeColor(strokeColor_);
 		newWbItem_->setFillColor(fillColor_);

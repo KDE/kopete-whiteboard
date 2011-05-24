@@ -286,7 +286,6 @@ void WbItem::setStrokeWidth(int width) {
 QDomElement WbItem::svg() {
     QDomDocument doc;
     QDomElement _svg = doc.createElement("item");
-    kDebug() << attributes.keys().size();
     foreach(QString a, attributes.keys()) {
             if(!attributes[a].isNull())
                     _svg.setAttribute(a, attributes[a]);
@@ -337,10 +336,10 @@ QDomElement WbItem::svg() {
 QList<QString> WbItem::parseSvg(QDomElement &_svg, bool emitChanges) {
 	QList<QString> changed;
         //vvvvvv crashing without it
-        QDomDocument doc;
-        QDomElement _new = doc.createElement("new");
+        QDomDocument __doc;
+        QDomElement _new = __doc.createElement("new");
         _new.appendChild( _svg );
-        doc.appendChild( _new );
+        __doc.appendChild( _new );
         //    kDebug() << doc.toString();
         //^^^^^^ crashing without it
 	// First process changes to existing elements
@@ -438,7 +437,7 @@ QList<QString> WbItem::parseSvg(QDomElement &_svg, bool emitChanges) {
 				s->setPen(pen);
 			}*/
 		}
-
+                
 		if(changed.contains("transform"))
 			graphicsItem()->setMatrix(parseTransformationMatrix(attributes["transform"]));
 
@@ -452,10 +451,20 @@ void WbItem::regenerateTransform() {
 		return;
 	QMatrix m = graphicsItem()->matrix();
 	QString old = attributes["transform"];
-	if(m.isIdentity())
+        kDebug() << old;
+        kDebug() << m.m11();
+        kDebug() << m.m11();
+        kDebug() << m.m21();
+        kDebug() << m.m22();
+        kDebug() << m.dx();
+        kDebug() << m.dy();
+	if(m.isIdentity()) {
 		attributes["transform"] = QString();
-	else
+        } else {
 		attributes["transform"] = QString("matrix(%1 %2 %3 %4 %5 %6)").arg(m.m11()).arg(m.m12()).arg(m.m21()).arg(m.m22()).arg(m.dx()).arg(m.dy());
+        }
+        kDebug() << attributes["transform"];
+
 	if(attributes["transform"] != old)
 		emit attributeChanged(id(), "transform", attributes["transform"], old);
 }
@@ -1581,6 +1590,7 @@ QString WbItem::idFromUrl(const QString &url)
 
 QMatrix WbItem::parseTransformationMatrix(const QString &value)
 {
+    kDebug() << value;
 	if(value.isEmpty())
 		return QMatrix();
 	QMatrix matrix;
@@ -1617,9 +1627,8 @@ QMatrix WbItem::parseTransformationMatrix(const QString &value)
 			++itr;// '('
 			QList<qreal> points = WbItem::parseNumbersList(itr);
 			++itr; // ')'
-
-			Q_ASSERT(points.count() == 2 ||
-					 points.count() == 1);
+                        kDebug() << "sem";
+			Q_ASSERT(points.count() == 2 || points.count() == 1);
 			if (points.count() == 2)
 				matrix.translate(points[0], points[1]);
 			else
@@ -1638,8 +1647,7 @@ QMatrix WbItem::parseTransformationMatrix(const QString &value)
 			++itr;// '('
 			QList<qreal> points = WbItem::parseNumbersList(itr);
 			++itr;// ')'
-			Q_ASSERT(points.count() == 3 ||
-					 points.count() == 1);
+			Q_ASSERT(points.count() == 3 || points.count() == 1);
 			if (points.count() == 3) {
 				matrix.translate(points[1], points[2]);
 				matrix.rotate(points[0]);
@@ -1661,8 +1669,7 @@ QMatrix WbItem::parseTransformationMatrix(const QString &value)
 			++itr;// '('
 			QList<qreal> points = WbItem::parseNumbersList(itr);
 			++itr;// ')'
-			Q_ASSERT(points.count() == 2 ||
-					 points.count() == 1);
+			Q_ASSERT(points.count() == 2 || points.count() == 1);
 			if (temp == QLatin1String("scale")) {
 				if (points.count() == 2) {
 					matrix.scale(points[0], points[1]);

@@ -547,6 +547,12 @@ bool WbScene::processConfigure(const QDomElement &configure) {
 	if(wbitem) {
 		// Note that _svg->svg() returns a deep copy
 		QDomElement _svg = wbitem->svg();
+                //vvvvvvvvvv causing crash without it
+                QDomDocument doc;
+                doc.createElement("bla");
+                doc.appendChild(_svg);
+                kDebug() << doc.toString();
+                //^^^^^^^^^^
 		if(importing)
 			wbitem->version = configure.attribute("version").toInt();
 		else
@@ -578,20 +584,20 @@ bool WbScene::processConfigure(const QDomElement &configure) {
 							newValue = edit.text();
 						_svg.setAttribute(attributeName, newValue);
 					} else if(edit.nodeName() == "content") {
-						QDomNodeList oldContent = _svg.cloneNode().childNodes();
+                                            QDomNodeList oldContent = _svg.cloneNode().childNodes();
 						// Remove queued <configure>s that had the same target and attribute and retrieve the correct oldvalue
-            if (_svg.nodeName().compare("foreignObject") == 0)
-            {
-              QDomElement el = edit.cloneNode().toElement();
-              QDomElement el2 = el.firstChildElement();              
-              return setElement(el2, newParent, wbitem->id(), wbitem->index());
-            }
-            removeFromQueue(configure.attribute("target"), oldContent);
-            wbitem->undos.append(EditUndo(configure.attribute("version").toInt(), oldContent));
-            while(_svg.hasChildNodes())
-              _svg.removeChild(_svg.firstChild());
-            while(edit.hasChildNodes())
-              _svg.appendChild(edit.childNodes().at(0));
+                                            if (_svg.nodeName().compare("foreignObject") == 0)
+                                            {
+                                              QDomElement el = edit.cloneNode().toElement();
+                                              QDomElement el2 = el.firstChildElement();
+                                              return setElement(el2, newParent, wbitem->id(), wbitem->index());
+                                            }
+                                            removeFromQueue(configure.attribute("target"), oldContent);
+                                            wbitem->undos.append(EditUndo(configure.attribute("version").toInt(), oldContent));
+                                            while(_svg.hasChildNodes())
+                                              _svg.removeChild(_svg.firstChild());
+                                            while(edit.hasChildNodes())
+                                              _svg.appendChild(edit.childNodes().at(0));
 					} else if(edit.nodeName() == "parent") {
 						QString oldParent = newParent;
 						// Remove queued <configure>s that had the same target and attribute and retrieve the correct oldvalue

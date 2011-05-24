@@ -143,6 +143,7 @@ WhiteboardDialog::WhiteboardDialog(Kopete::ChatSession *chatSession, QWidget* pa
 
         mMainWidget->undoButton->setIcon ( KIcon("undo") );
         mMainWidget->undoButton->setToolTip ( i18n("Undo") );
+        mMainWidget->undoButton->setVisible(false);
 
         mMainWidget->exportButton->setIcon ( KIcon("export") );
         mMainWidget->exportButton->setToolTip ( i18n("Export") );
@@ -266,7 +267,7 @@ void WhiteboardDialog::slotTabCurrentChanged(int i)
     if(tabWidget != NULL) {
         i = tabWidget->currentIndex();
     } else {
-        i = 1;
+        i = 0;
     }
     if (sessions.at(i)->m_wbwidget->elements.size() > 0) {
         mMainWidget->undoButton->setEnabled(true);
@@ -511,7 +512,7 @@ void  WhiteboardDialog::slotUndoClicked() {
     if(tabWidget != NULL) {
         i = tabWidget->currentIndex();
     } else {
-        i = 1;
+        i = 0;
     }
     sessions.at(i)->m_wbwidget->undo();
 }
@@ -537,15 +538,16 @@ void  WhiteboardDialog::slotPrintClicked() {
 }
 
 void  WhiteboardDialog::slotQuitClicked() {
-    switch ( KMessageBox::warningYesNoCancel( this,
-        i18n("Are you sure you want to quit?")) ) {
-    case KMessageBox::Yes :
-        close();
-    case KMessageBox::No :
-        return;
-    default: // cancel
-        return;
-    }
+//    switch ( KMessageBox::warningYesNoCancel( this,
+//        i18n("Are you sure you want to quit?")) ) {
+//    case KMessageBox::Yes :
+//        close();
+//    case KMessageBox::No :
+//        return;
+//    default: // cancel
+//        return;
+//    }
+    close();
 }
 
 void  WhiteboardDialog::slotClearClicked() {
@@ -735,7 +737,7 @@ bool WhiteboardDialog::queryClose()
     case KMessageBox::Yes :
         return true;
     case KMessageBox::No :
-        return true;
+        return false;
     default: // cancel
         return false;
     }

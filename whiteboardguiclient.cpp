@@ -94,13 +94,11 @@ void WhiteboardGUIClient::slotSentWhiteboardInvitation()
 void WhiteboardGUIClient::slotMessageReceived ( Kopete::Message &message, Kopete::ChatSession * session)
 {
     Q_UNUSED(session);
-    
-    kDebug() << "Message recieved";
-    
+    Q_UNUSED(message);   
+//    kDebug() << "Message recieved";
 //    session -> view() -> msgManager() -> clear();
 //    message.setPlainBody ( viewPlugin );
 //    message . setRequestedPlugin(viewPlugin);
-
 //    message . setHtmlBody("<input type='button' value='Accept' /><input type='button' value='Reject' />");
     kDebug() << message.plainBody();
 }
