@@ -45,7 +45,6 @@ WbWidget::WbWidget(const QString &session, const QString &ownJid, const QSize &s
 	strokeWidth_ = 1;
         clearedSize = 0;
 
-//	setCacheMode(CacheBackground);
         setContextMenuPolicy(Qt::DefaultContextMenu);
 	setRenderHint(QPainter::Antialiasing);
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -53,15 +52,23 @@ WbWidget::WbWidget(const QString &session, const QString &ownJid, const QSize &s
 	scene = new WbScene(session, ownJid, s, this);
 	scene->setItemIndexMethod(QGraphicsScene::NoIndex);
 	scene->setSceneRect(0, 0, s.width(), s.height());
-//        setBackgroundRole (QPalette::Background );
-//        setForegroundRole (QPalette::Foreground );
         
 	setScene(scene);
         
-//	connect(scene, SIGNAL(newWb(const QDomElement&)), SIGNAL(newWb(const QDomElement&)));
         connect(scene, SIGNAL(newWb(const QDomElement&)), this, SLOT (slotNewWb(const QDomElement&)) );
 
 	setMode(Select);
+}
+
+/**
+ * Same like processWb but emits a signal with new wb
+ * @param wb
+ * @return 
+ */
+bool WbWidget::importWb(const QDomElement &wb) {
+        elements.append(wb);
+        emit newWb(wb);
+	return scene->processWb(wb);
 }
 
 bool WbWidget::processWb(const QDomElement &wb) {
@@ -163,11 +170,13 @@ void WbWidget::setMode(Mode mode) {
 		setDragMode(QGraphicsView::RubberBandDrag);
 		setCursor(Qt::SizeAllCursor);
 	} else if(mode_ == Rotate) {
-		setDragMode(QGraphicsView::NoDrag);
+                setDragMode(QGraphicsView::RubberBandDrag);
+//		setDragMode(QGraphicsView::NoDrag);
 		unsetCursor();
 		// TODO: load cursor from image
 	} else if(mode_ == Scale) {
-		setDragMode(QGraphicsView::NoDrag);
+                setDragMode(QGraphicsView::RubberBandDrag);
+//		setDragMode(QGraphicsView::NoDrag);
 		setCursor(Qt::SizeBDiagCursor);
 	} else if(mode_ == Scroll) {
 		setDragMode(QGraphicsView::ScrollHandDrag);
@@ -218,8 +227,8 @@ void WbWidget::undo()
         int elSize = scene->items().size();
         
         WbWidget::clear();
-    kDebug() << elements.size();
-    kDebug() << scene->items().size();
+        kDebug() << elements.size();
+        kDebug() << scene->items().size();
         //delete last "elSize" delete elements generated with clear
         for (int index = 0; index < elSize; index++) {
             if(elements.size() > 0) {
@@ -300,18 +309,18 @@ void WbWidget::mousePressEvent(QMouseEvent * event) {
 	if(mode_ == Select) {
 		QGraphicsView::mousePressEvent(event);
 		return;
-	} else if(mode_ == Translate)
+	} else if(mode_ == Translate) {
 		//Ctrl: translate
 		passEvent = QMouseEvent(event->type(), event->pos(), event->globalPos(), event->button(), event->buttons(), Qt::KeyboardModifiers(Qt::ControlModifier));
-	else if(mode_ == Rotate)
+        } else if(mode_ == Rotate) {
 		//Ctrl + Alt: rotate
 		passEvent = QMouseEvent(event->type(), event->pos(), event->globalPos(), event->button(), event->buttons(), Qt::KeyboardModifiers(Qt::ControlModifier + Qt::AltModifier));
-	else if(mode_ == Scale)
+        } else if(mode_ == Scale) {
 		//Ctrl + Shift: scale
 		passEvent = QMouseEvent(event->type(), event->pos(), event->globalPos(), event->button(), event->buttons(), Qt::KeyboardModifiers(Qt::ControlModifier + Qt::ShiftModifier));
-	else if(mode_ == Scroll)
+        } else if(mode_ == Scroll) {
 		passEvent = QMouseEvent(event->type(), event->pos(), event->globalPos(), event->button(), event->buttons(), Qt::KeyboardModifiers(Qt::NoModifier));
-	else if(mode_ == Erase) {
+        } else if(mode_ == Erase) {
 		return;
 	} else if(mode_ == DrawPath) {
 		// Create the element with starting position
@@ -360,6 +369,7 @@ void WbWidget::mousePressEvent(QMouseEvent * event) {
             }
             return;
 	} else if(mode_ == DrawRectangle) {
+            kDebug() << "sem";
 		QPointF startPoint = mapToScene(mapFromGlobal(event->globalPos()));
 		QDomDocument d;
 		QDomElement _svg = d.createElement("rect");
@@ -368,6 +378,8 @@ void WbWidget::mousePressEvent(QMouseEvent * event) {
 		_svg.setAttribute("height", 2);
 		_svg.setAttribute("width", 2);
 		// Create the element
+                kDebug() << scene->newId();
+                kDebug() << scene->newIndex();
 		newWbItem_ = new WbRectangle(_svg, scene->newId(), scene->newIndex(), "root", scene);
 		newWbItem_->setStrokeColor(strokeColor_);
 		newWbItem_->setFillColor(fillColor_);
@@ -437,18 +449,18 @@ void WbWidget::mouseMoveEvent(QMouseEvent * event) {
 	if(mode_ == Select) {
 		QGraphicsView::mouseMoveEvent(event);
 		return;
-	} else if(mode_ == Translate)
+	} else if(mode_ == Translate) {
 		//Ctrl: translate
 		passEvent = QMouseEvent(event->type(), event->pos(), event->globalPos(), event->button(), event->buttons(), Qt::KeyboardModifiers(Qt::ControlModifier));
-	else if(mode_ == Rotate)
+        } else if(mode_ == Rotate) {
 		//Ctrl + Alt: rotate
 		passEvent = QMouseEvent(event->type(), event->pos(), event->globalPos(), event->button(), event->buttons(), Qt::KeyboardModifiers(Qt::ControlModifier + Qt::AltModifier));
-	else if(mode_ == Scale)
+        } else if(mode_ == Scale) {
 		//Ctrl + Shift: scale
 		passEvent = QMouseEvent(event->type(), event->pos(), event->globalPos(), event->button(), event->buttons(), Qt::KeyboardModifiers(Qt::ControlModifier + Qt::ShiftModifier));
-	else if(mode_ == Scroll)
+        } else if(mode_ == Scroll) {
 		passEvent = QMouseEvent(event->type(), event->pos(), event->globalPos(), event->button(), event->buttons(), Qt::KeyboardModifiers(Qt::NoModifier));
-	else if(mode_ == Erase) {
+        } else if(mode_ == Erase) {
 		if(event->buttons() != Qt::MouseButtons(Qt::LeftButton))
 			return;
 		// Erase all items that appear in a 2*strokeWidth_ square with center at the event position

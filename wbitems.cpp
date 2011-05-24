@@ -286,6 +286,7 @@ void WbItem::setStrokeWidth(int width) {
 QDomElement WbItem::svg() {
     QDomDocument doc;
     QDomElement _svg = doc.createElement("item");
+    kDebug() << attributes.keys().size();
     foreach(QString a, attributes.keys()) {
             if(!attributes[a].isNull())
                     _svg.setAttribute(a, attributes[a]);
@@ -327,19 +328,21 @@ QDomElement WbItem::svg() {
                     _svg.setTagName("g");
                     break;
             case 87654998:
-              _svg.setTagName("foreignObject");
-              break;
+                    _svg.setTagName("foreignObject");
+                    break;
     }
     return _svg;
 };
 
 QList<QString> WbItem::parseSvg(QDomElement &_svg, bool emitChanges) {
 	QList<QString> changed;
-//        QDomDocument doc;
-//        doc.appendChild ( _svg );
-//        msg.setPlainBody(doc.toString());
-//        kDebug() << (_svg == NULL);
-//        kDebug() << _svg.text();
+        //vvvvvv crashing without it
+        QDomDocument doc;
+        QDomElement _new = doc.createElement("new");
+        _new.appendChild( _svg );
+        doc.appendChild( _new );
+        //    kDebug() << doc.toString();
+        //^^^^^^ crashing without it
 	// First process changes to existing elements
 	foreach(QString a, attributes.keys()) {
 		if(attributes[a] != _svg.attribute(a)) {
@@ -370,7 +373,7 @@ QList<QString> WbItem::parseSvg(QDomElement &_svg, bool emitChanges) {
 		else
 			changed.append(a.nodeName());
 	}
-
+        
 	if(graphicsItem()) {
 		// 'x' & 'y' & 'cx' & 'cy'
 		if(changed.contains("x") || changed.contains("y") || changed.contains("cx") || changed.contains("cy")) {
@@ -802,10 +805,17 @@ QList<QString> WbRectangle::parseSvg(QDomElement &_svg, bool emitChanges) {
 }
 
 WbItem* WbRectangle::clone() {
-	QDomElement _svg = svg();
-	WbItem* cloned = new WbRectangle(_svg, id(), index(), parentWbItem(), 0);
-	cloned->undos = undos;
-	return cloned;
+    QDomElement _svg = svg();
+    //vvvvvv crashing without it
+    QDomDocument doc;
+    QDomElement _new = doc.createElement("new");
+    _new.appendChild( _svg );
+    doc.appendChild( _new );
+//    kDebug() << doc.toString();
+    //^^^^^^
+    WbItem* cloned = new WbRectangle(_svg, id(), index(), parentWbItem(), 0);
+    cloned->undos = undos;
+    return cloned;
 }
 
 void WbRectangle::contextMenuEvent (QGraphicsSceneContextMenuEvent * event) {

@@ -57,6 +57,8 @@ public:
 	/*! \brief Processes an incoming whiteboard element.*/
 	bool processWb(const QDomElement &wb, bool);
         bool processWb(const QDomElement &wb);
+        /*! \brief Same like processWb but emits a signal.*/
+        bool importWb(const QDomElement &wb);
 	/*! \brief Returns the session this widget is visualizing.*/
 	QString session();
 	/*! \brief Returns the JID used by the user in the session.*/

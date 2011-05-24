@@ -167,7 +167,7 @@ QList<WbItem*> WbScene::elements() const {
 			elementKeys.removeAll(key);
 		}
 	}
-
+        
 	QList<WbItem*> returnedElements;
 	foreach(QString key, returnKeys) {
 		WbItem* element = elements_[key]->clone();

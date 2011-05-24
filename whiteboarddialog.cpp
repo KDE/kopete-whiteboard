@@ -155,16 +155,11 @@ WhiteboardDialog::WhiteboardDialog(Kopete::ChatSession *chatSession, QWidget* pa
 
         mMainWidget->undoButton->setEnabled(false);
 
-        mMainWidget->scrollButton->setIcon ( KIcon("scroll") );
+        mMainWidget->scrollButton->setIcon ( KIcon("move") );
 //        mMainWidget->textButton->setToolTip ( i18n("Add text") );
         
-        
-//        sess->m_wbwidget = new WbWidget("s1", mc->displayName(), QSize(1920, 1200), mMainWidget->mainDraw);
         sess->m_wbwidget = new WbWidget("s1", mc->displayName(), QSize(1920, 1200), mMainWidget->mainFrame);
         
-//        connect(sess->m_wbwidget, SIGNAL(newWb(QDomElement)), SLOT(sendWhiteboard(QDomElement)));
-//        connect(sess->m_wbwidget, SIGNAL(modeChanged(WbWidget::Mode)), SLOT(modeChanged(WbWidget::Mode)));
-
         sess->m_wbwidget->setMode(WbWidget::DrawPath);
         sess->m_wbwidget->setMinimumSize(300, 400);
         sess->m_wbwidget->setSize(QSize(1920,1200));
@@ -172,33 +167,10 @@ WhiteboardDialog::WhiteboardDialog(Kopete::ChatSession *chatSession, QWidget* pa
         
         mMainWidget->mainFrameLayout->addWidget(sess->m_wbwidget, 0, 0, 1, 1);
 
-//        mMainWidget->scrollArea = new QScrollArea(mMainWidget->mainFrame);
-//        scrollArea->setObjectName(QString::fromUtf8("scrollArea"));
-//        mMainWidget->scrollArea->setWidgetResizable(true);
-//        mMainWidget->scrollArea->adjustSize();
-//        mMainWidget->scrollArea->showMaximized();
-//        mMainWidget->scrollArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-//        mMainWidget->scrollArea->setWidget(sess->m_wbwidget);
-
-//        sess->m_wbwidget->setParent(mMainWidget->scrollArea);
-
-//        scrollArea = new QScrollArea();
-//        scrollArea->setParent(mMainWidget->mainFrame);
-//        scrollArea->setWidgetResizable(true);
-
-//        scrollArea->setWidget(sess->m_wbwidget);
-        
-
-
-//        mMainWidget->scrollArea->setMinimumSize(QSize(1024,798));
-//        m_wbwidget->adjustSize();
-        
-
         setCentralWidget(w);
-//	setMainWidget( w );
 
-//        connect(sess->m_wbwidget, SIGNAL(newWb(const QDomElement &)), sess, SLOT(slotElementReady(const QDomElement &)));
-//        connect(sess, SIGNAL(newWb(const QDomElement &)), this, SLOT(slotElementReady(const QDomElement &)));
+        connect(sess->m_wbwidget, SIGNAL(newWb(const QDomElement &)), sess, SLOT(slotElementReady(const QDomElement &)));
+        connect(sess, SIGNAL(newWb(const QDomElement &)), this, SLOT(slotElementReady(const QDomElement &)));
         connect(sess, SIGNAL(userOffline(QString)), this, SLOT(slotUserOffline(QString)));
 
         connect(mMainWidget->m_paletteWidget, SIGNAL(fgColorChanged(const QColor &)), this, SLOT(slotFgColorChanged(const QColor &)));
@@ -231,18 +203,7 @@ WhiteboardDialog::WhiteboardDialog(Kopete::ChatSession *chatSession, QWidget* pa
         connect(mMainWidget->quitButton, SIGNAL(clicked(bool)), this, SLOT(slotQuitClicked()));
 
         sessions.append(sess);
-//                mMainWidget->selectButton->setIcon ( KIcon("select") );
-//        mMainWidget->eraseButton->setIcon ( KIcon("erase") );
-//        mMainWidget->pathButton->setIcon ( KIcon("draw_paths") );
-//        mMainWidget->lineButton->setIcon ( KIcon("draw_lines") );
-//        mMainWidget->rectangleButton->setIcon ( KIcon("draw_rectangles") );
-//        mMainWidget->ellipseButton->setIcon ( KIcon("draw_ellipses") );
-//        mMainWidget->imageButton->setIcon ( KIcon("add_image") );
-//        mMainWidget->textButton->setIcon ( KIcon("add_text") );
-//	//initActions
 
-//	resize(800, 600);
-//	// show the dialog before people get impatient
 	show();
 //
 }
@@ -274,7 +235,6 @@ void WhiteboardDialog::addTab(Kopete::ChatSession * chatSession)
     sess->m_wbwidget->setMinimumSize(300, 400);
 //    sess->m_wbwidget->setSize(QSize(710,570));
     sess->m_wbwidget->setSize(QSize(1920,1200));
-//    WbWidget *m_wbwidget;
     
     if(tabWidget == NULL) {
         //existing
@@ -286,12 +246,6 @@ void WhiteboardDialog::addTab(Kopete::ChatSession * chatSession)
         connect(tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(slotCloseTab(int)));
         connect(tabWidget, SIGNAL(currentChanged (int)), this, SLOT(slotTabCurrentChanged (int)));
     }
-
-//    QScrollArea * scroll = new QScrollArea();
-//    scroll->setWidget(m_wbwidget);
-//    tabWidget->setParent(mMainWidget->mainFrame);
-
-//    tabWidget->addTab(mMainWidget->scrollArea, "ahoj");
     tabWidget->addTab( m_wbwidget , KIcon("online") ,QString(jid));
 
     tabWidget->setGeometry(0,0,721,581);
@@ -607,26 +561,96 @@ void  WhiteboardDialog::slotClearClicked() {
 
 void  WhiteboardDialog::slotImportClicked() {
     kDebug() << "clicked";
-//    int i;
-//    if(tabWidget != NULL) {
-//        i = tabWidget->currentIndex();
-//    } else {
-//        i = 1;
-//    }
-//    sessions.at(i)->m_wbwidget->clear();
-//    mMainWidget->undoButton->setEnabled(false);
+    switch ( KMessageBox::warningYesNoCancel( this, i18n("Import will clear your current screen, are you sure?")) ) {
+        case KMessageBox::Yes :
+            break;
+        case KMessageBox::No :
+            return;
+        default: // cancel
+            return;
+    }
+    int i;
+    if(tabWidget != NULL) {
+        i = tabWidget->currentIndex();
+    } else {
+        i = 0;
+    }
+
+    QString filename = QFileDialog::getOpenFileName(this, i18n("Load XML file"), "~/",  i18n("Whiteboard file (*.xml)"));
+
+    mMainWidget->undoButton->setEnabled(false);
+
+    if(!filename.isEmpty()) {
+        sessions.at(i)->m_wbwidget->clear();
+        QFile file( filename );
+        if( !file.open( IO_ReadOnly ) ) {
+            QMessageBox::warning( this, "Loading", i18n("Failed to load file.") );
+            return;
+        }
+        QDomDocument doc;
+        if( !doc.setContent( &file ) ) {
+            QMessageBox::warning( this, "Loading", i18n("Failed to load file.") );
+            file.close();
+            return;
+        }
+        file.close();
+
+        QDomNodeList list = doc.elementsByTagName("wb");
+        if(list.size() != 1) {
+            QMessageBox::warning( this, "Loading", i18n("Failed to load file.") );
+            return;
+        }
+        QDomElement wb = list.at(0).toElement();//first and only element
+        wb.setAttribute("session", "s1");
+
+        QDomNodeList news = wb.childNodes();
+//        if(news.isEmpty())
+        for(int j=0; j< news.size(); j++) {
+            news.at(j).toElement().setAttribute("id",    sessions.at(i)->m_wbwidget->scene->newId());
+            news.at(j).toElement().setAttribute("index", sessions.at(i)->m_wbwidget->scene->newId());
+        }
+
+        sessions.at(i)->m_wbwidget->importWb(wb);
+
+        QDomDocument doc2;
+        doc2.createElement("chuj");
+        doc2.appendChild(wb);
+        kDebug() << doc2.toString();
+    }
 }
 
 void  WhiteboardDialog::slotExportClicked() {
     kDebug() << "clicked";
-//    int i;
-//    if(tabWidget != NULL) {
-//        i = tabWidget->currentIndex();
-//    } else {
-//        i = 1;
-//    }
-//    sessions.at(i)->m_wbwidget->clear();
-//    mMainWidget->undoButton->setEnabled(false);
+    int i;
+    if(tabWidget != NULL) {
+        i = tabWidget->currentIndex();
+    } else {
+        i = 0;
+    }
+    QDomDocument doc;
+    QDomElement _wb = doc.createElement("wb");
+    _wb.setAttribute("xmlns","http://jabber.org/protocol/svgwb");
+    foreach(WbItem* item, sessions.at(i)->m_wbwidget->scene->elements()) {
+        QDomElement _new = doc.createElement("new");
+        _new.appendChild( item->svg() );
+        _wb.appendChild( _new );
+        Q_UNUSED(item);
+//        doc.appendChild( item->svg() );
+    }
+    doc.appendChild(_wb);
+    QString filename = QFileDialog::getSaveFileName(this, i18n("Save file as"), "~/whiteboard-"+sessions.at(i)->jid+".xml", i18n("Whiteboard file (*.xml)"));
+
+    if(filename.isEmpty()) return;
+    
+    QFile file( filename );
+    if( !file.open( IO_WriteOnly ) )
+    {
+        QMessageBox::warning( this, "Saving", "Failed to save file." );
+        return;
+    }
+    QTextStream ts( &file );
+    ts << doc.toString();
+    file.close();
 }
 
 void  WhiteboardDialog::slotSaveClicked() {
@@ -706,29 +730,17 @@ void WhiteboardDialogSess::slotElementReady(const QDomElement &element) {
 
 bool WhiteboardDialog::queryClose()
 {
-//    switch ( KMessageBox::warningYesNoCancel( this,
-//        i18n("Are you sure you want to quit?")) ) {
-//    case KMessageBox::Yes :
-//        return true;
-//    case KMessageBox::No :
-//        return true;
-//    default: // cancel
-//        return false;
-//    }
+    switch ( KMessageBox::warningYesNoCancel( this,
+        i18n("Are you sure you want to quit?")) ) {
+    case KMessageBox::Yes :
+        return true;
+    case KMessageBox::No :
+        return true;
+    default: // cancel
+        return false;
+    }
     return true;
 }
-
-//        connect(mMainWidget->pathButton, SIGNAL(clicked(bool)), this, SLOT(slotPathClicked()));
-//        connect(mMainWidget->lineButton, SIGNAL(clicked(bool)), this, SLOT(slotLineClicked()));
-//        connect(mMainWidget->rectangleButton, SIGNAL(clicked(bool)), this, SLOT(slotRectangleClicked()));
-//        connect(mMainWidget->ellipseButton, SIGNAL(clicked(bool)), this, SLOT(slotEllipseClicked()));
-//        connect(mMainWidget->imageButton, SIGNAL(clicked(bool)), this, SLOT(slotImageClicked()));
-//        connect(mMainWidget->textButton, SIGNAL(clicked(bool)), this, SLOT(slotTextClicked()));
-
-//void WhiteboardDialog::mouseMoveEvent(QMouseEvent *e)
-//{
-//    kDebug() << "X: " << e->x() << " Y:"<< e->y();
-//}
 
 WhiteboardDialog::~WhiteboardDialog()
 {
