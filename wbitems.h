@@ -262,10 +262,10 @@ private:
 	qreal index_;
 };
 
-/*! \brief An item for storing the unkown SVG elements.
+/*! \brief An item for storing the unknown SVG elements.
  *  Inherits WbItem.
  *
- *  The purpose of this item is to store the unkown element. It is not visualized.
+ *  The purpose of this item is to store the unknown element. It is not visualized.
  *  \sa WbItem
  */
 class WbUnknown : public WbItem

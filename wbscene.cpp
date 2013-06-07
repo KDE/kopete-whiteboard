@@ -368,7 +368,7 @@ void WbScene::sendWb() {
 			QDomElement configure = d.createElement("configure");
 			configure.setAttribute("target", queue_.first().target);
 			configure.setAttribute("version", ++i->version);
-			// Lump all consequtive configure edits witht the same target into one <configure/>.
+			// Lump all consecutive configure edits witht the same target into one <configure/>.
 			while(queue_.first().type == Edit::AttributeEdit || queue_.first().type == Edit::ParentEdit || queue_.first().type == Edit::ContentEdit && queue_.first().target == configure.attribute("target")) {
 				// Store the EditUndo's for each edit
 				Edit edit = queue_.takeFirst();
@@ -647,7 +647,7 @@ bool WbScene::processConfigure(const QDomElement &configure) {
 					return false;
 				}
 			}
-			// The configure was processed succesfully even though no action was taken.
+			// The configure was processed successfully even though no action was taken.
 			// This may happen if the wbitem was already reverted by another configure.
 			return true;
 		} else if (configure.attribute("version").toInt() > wbitem->version) {

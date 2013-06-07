@@ -718,7 +718,7 @@ void WhiteboardDialogSess::slotElementReady(const QDomElement &element) {
     emit newWb(element);
 //
     QDomDocument doc;
-    doc.createElement("element");//it doesnt convert to string without it
+    doc.createElement("element");//it does not convert to string without it
     doc.appendChild(element);
 
 //    kDebug() << "wb to send";

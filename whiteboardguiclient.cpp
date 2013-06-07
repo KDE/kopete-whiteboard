@@ -95,7 +95,7 @@ void WhiteboardGUIClient::slotMessageReceived ( Kopete::Message &message, Kopete
 {
     Q_UNUSED(session);
     Q_UNUSED(message);   
-//    kDebug() << "Message recieved";
+//    kDebug() << "Message received";
 //    session -> view() -> msgManager() -> clear();
 //    message.setPlainBody ( viewPlugin );
 //    message . setRequestedPlugin(viewPlugin);

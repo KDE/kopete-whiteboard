@@ -131,7 +131,7 @@ void WbWidget::setMode(Mode mode) {
 					// Send the first chunk with the new element
 					_svg.setAttribute("xlink:href", datastring.left(chunksize));
 					scene->queueNew(newWbItem_->id(), newWbItem_->index(), _svg);
-					// Send the the rest of the data chunks in attribute edits
+					// Send the rest of the data chunks in attribute edits
 					int processed = chunksize;
 					while(processed < datastring.size()) {
 						scene->queueAttributeEdit(newWbItem_->id(), "xlink:href", datastring.mid(processed, chunksize), _svg.attribute("xlink:href"), processed, processed);
@@ -251,7 +251,7 @@ void WbWidget::undo()
         foreach(QDomElement el, elements) {
 //            scene->processWb(el);
             QDomDocument doc;
-            doc.createElement("element");//it doesnt convert to string without it
+            doc.createElement("element");//it does not convert to string without it
             doc.appendChild(el);
 //            kDebug() << doc.toString();
             WbWidget::processWb(el, false);

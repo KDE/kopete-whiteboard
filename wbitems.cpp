@@ -186,7 +186,7 @@ void WbItem::setIndex(qreal index, bool emitChanges) {
 			int c;
 			for(int i=0; i < id_.length(); i++) {
 				c = id_.at(i).unicode();
-				//TODO: what should be the minumum width? at least 3 but can a jid contain characters that have a value beyond 999
+				//TODO: what should be the minimum width? at least 3 but can a jid contain characters that have a value beyond 999
 				z.append(QString("%1").arg(QString("%1").arg(c), 4, QLatin1Char('0')));
 			}
 	// 		qDebug() << "z: " << z;
@@ -503,7 +503,7 @@ void WbItem::handleMouseMoveEvent(QGraphicsSceneMouseEvent * event) {
 			// get center coordinates in item coordinates
 			QPointF c = center();
 			QMatrix translation, delta;
-			// translates the the item's center to the origin of the item coordinates
+			// translates the item's center to the origin of the item coordinates
 			translation.translate(-c.x(), -c.y());
 			// Rotate. Determine the direction relative to the center
 			// Divide the sum by two to reduce the "speed" of rotation
@@ -531,7 +531,7 @@ void WbItem::handleMouseMoveEvent(QGraphicsSceneMouseEvent * event) {
 			// get center coordinates in item coordinates
 			QPointF c = center();
 			QMatrix translation, delta;
-			// translates the the item's center to the origin of the item coordinates
+			// translates the item's center to the origin of the item coordinates
 			translation.translate(-c.x(), -c.y());
 			// Scale.
 			// Moving mouse up enlarges, down shrinks, y axis.
@@ -715,7 +715,7 @@ QList<QString> WbEllipse::parseSvg(QDomElement &_svg, bool emitChanges) {
 		// FIXME: I think it's an issue with Qt, but with very small value I sometime get when setRect()
 		// QPainterPath::lineTo: Adding point where x or y is NaN, results are undefined
 		// QPainterPath::cubicTo: Adding point where x or y is NaN, results are undefined
-		// That's why i'm putting those minumum values in
+		// That's why i'm putting those minimum values in
 		if(okX && okY) {
 			if(rx <= 1)
 				rx = 1;
