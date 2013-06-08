@@ -8,4 +8,16 @@ X-KDE-ParentApp=kopete_whiteboard
 X-KDE-ParentComponents=kopete_whiteboard
 
 Name=whiteboard Plugin Configuration
+Name[cs]=Nastavení modulu Tabule
+Name[nl]=Plugin-configuratie van whiteboard
+Name[pt]=Configuração do 'Plugin' do Quadro
+Name[sv]=Inställning av insticksprogram för skrivtavla
+Name[uk]=Налаштування додатка дошки
+Name[x-test]=xxwhiteboard Plugin Configurationxx
 Comment=whiteboard Plugin
+Comment[cs]=Modul Tabule
+Comment[nl]=Plugin van whiteboard
+Comment[pt]='Plugin' do Quadro
+Comment[sv]=Insticksprogram för skrivtavla
+Comment[uk]=Додаток дошки для малювання
+Comment[x-test]=xxwhiteboard Pluginxx
