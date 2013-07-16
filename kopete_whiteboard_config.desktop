@@ -9,6 +9,7 @@ X-KDE-ParentComponents=kopete_whiteboard
 
 Name=whiteboard Plugin Configuration
 Name[cs]=Nastavení modulu Tabule
+Name[fr]=Configuration du module externe de tableau blanc
 Name[hu]=faliújság bővítmény beállítása
 Name[nl]=Plugin-configuratie van whiteboard
 Name[pl]=Konfiguracja wtyczki białej tablicy
@@ -21,6 +22,7 @@ Name[uk]=Налаштування додатка дошки
 Name[x-test]=xxwhiteboard Plugin Configurationxx
 Comment=whiteboard Plugin
 Comment[cs]=Modul Tabule
+Comment[fr]=Module externe de tableau blanc
 Comment[hu]=faliújság bővítmény
 Comment[nl]=Plugin van whiteboard
 Comment[pl]=Wtyczka białej tablicy
