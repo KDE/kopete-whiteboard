@@ -1,13 +1,18 @@
+project(kopete-whiteboard)
+
+find_package(KDE4 REQUIRED)
+include(KDE4Defaults)
+find_package(Kopete REQUIRED)
+find_package(QCA2 REQUIRED)
+
 add_subdirectory( icons )
 add_subdirectory( icons/whiteboarding )
-include (KDE4Defaults)
 
 #include (MacroLibrary)
 #include(MacroOptionalAddSubdirectory)
 
-add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
-
-include_directories(${KOPETE_INCLUDES} ${QCA2_INCLUDE_DIR} )
+add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QCA2_DEFINITIONS})
+include_directories(${KDE4_INCLUDES} ${KOPETE_INCLUDE_DIR} ${KOPETE_INCLUDE_DIR}/kopete ${QCA2_INCLUDE_DIR})
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=14319) #/usr/share/kde4/config/kdebug.areas
 #add_definitions(-lqca)
