@@ -39,7 +39,7 @@
 K_PLUGIN_FACTORY(WhiteboardPreferencesFactory,
         registerPlugin<WhiteboardPreferences>();
         )
-K_EXPORT_PLUGIN(WhiteboardPreferencesFactory ( "kcm_kopete_whiteboard" ))
+K_EXPORT_PLUGIN(WhiteboardPreferencesFactory ( "kcm_kopete_whiteboard", "kopete_whiteboard" ))
 
 
 WhiteboardPreferences::WhiteboardPreferences ( QWidget *parent, const QVariantList &args )
