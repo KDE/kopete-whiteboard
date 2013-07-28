@@ -62,9 +62,9 @@ WhiteboardPlugin::WhiteboardPlugin ( QObject* parent, const QVariantList& /* arg
 		: Kopete::Plugin ( WhiteboardPluginFactory::componentData(), parent )
 {
         kDebug() << "Whiteboard Plugin loading...";
-        
+
 //        m_messageHandler = new WhiteboardMessageHandlerFactory(this);
-	m_messageHandler = new WhiteboardMessageHandlerFactory( this, this, 
+	m_messageHandler = new WhiteboardMessageHandlerFactory( this, this,
                 SLOT( slotNewSession( Kopete::MessageEvent * ) ),
                 SLOT( slotProcessWb ( QDomElement, Kopete::MessageEvent * ) ),
                 SLOT( slotTrySessionAccept ( Kopete::MessageEvent * ) ),
@@ -141,7 +141,7 @@ void WhiteboardPlugin::slotSendInvitation(Kopete::ChatSession * chatSession) {
             foreach( WhiteboardDialogSess * sess, dialog->sessions ) {
                 if(sess->jid == jid) {
                     KMessageBox::queuedMessageBox( Kopete::UI::Global::mainWidget(), KMessageBox::Error,
-                                    i18n( "<qt>An error has occurred while creating a new chat window. Propably because whiteboard session with user '%1' already exists.</qt>", mc -> displayName()),
+                                    i18n( "<qt>An error has occurred while creating a new chat window. Probably because whiteboard session with user '%1' already exists.</qt>", mc -> displayName()),
                                     i18n( "Error While Creating Chat Window" ) );
                     return;
                 }
@@ -241,7 +241,7 @@ void WhiteboardPlugin::slotTrySessionAccept(Kopete::MessageEvent * event)
                 return;
             }
             QString jid = mc -> displayName();
-            
+
             foreach( WhiteboardDialogSess * sess, dialog->sessions ) {
                 if(sess->jid == jid) {
                     WhiteboardPlugin::rejectInvitation(event);//session already exists
@@ -336,7 +336,7 @@ void WhiteboardPlugin::slotProcessWb(QDomElement wb, Kopete::MessageEvent * even
 //    if(dialog != NULL) {
 //        dialog->processWb(wb);
 //    }
-    
+
 }
 
 void WhiteboardPlugin::dialogDestroyed(WhiteboardDialog * dialog)
