@@ -8,6 +8,7 @@ X-KDE-ParentApp=kopete_whiteboard
 X-KDE-ParentComponents=kopete_whiteboard
 
 Name=whiteboard Plugin Configuration
+Name[bs]=Konfiguracija priključka table
 Name[cs]=Nastavení modulu Tabule
 Name[fr]=Configuration du module externe de tableau blanc
 Name[hu]=faliújság bővítmény beállítása
@@ -21,6 +22,7 @@ Name[tr]=whiteboard Eklenti Yapılandırması
 Name[uk]=Налаштування додатка дошки
 Name[x-test]=xxwhiteboard Plugin Configurationxx
 Comment=whiteboard Plugin
+Comment[bs]=Priključak table
 Comment[cs]=Modul Tabule
 Comment[fr]=Module externe de tableau blanc
 Comment[hu]=faliújság bővítmény
